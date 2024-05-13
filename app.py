@@ -10,6 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.action_chains import ActionChains
+from waitress import serve
 
 app = Flask(__name__)
 
@@ -466,4 +467,5 @@ def publish():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Lanzar el servidor WSGI con Waitress
+    serve(app, host='0.0.0.0', port=5000)
