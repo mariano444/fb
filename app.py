@@ -9,7 +9,7 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('/publish', methods=['POST'])
+@app.route('https://fb-tz4k.onrender.com/publish', methods=['POST'])
 def publish():
     try:
         username = request.form.get('username')
