@@ -70,7 +70,9 @@ def publish():
 
         return jsonify({'message': 'Publicaciones realizadas con éxito'}), 200
     except Exception as e:
+        print(f"Error en la publicación: {e}")
         return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     # Lanzar el servidor WSGI con Waitress
