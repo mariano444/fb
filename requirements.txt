@@ -1,10 +1,11 @@
-opencv-python
-numpy
 selenium
 urllib3
 pyvirtualdisplay
 Flask
 cffi
-
+waitress
+numpy
+opencv-python
+gunicorn
 
 
