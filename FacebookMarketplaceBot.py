@@ -18,6 +18,11 @@ class FacebookMarketplaceBot:
         self.password = password
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument("--disable-notifications")  # Bloquear las notificaciones externas
+        chrome_options.add_argument("--headless")  # Ejecutar en modo headless
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--remote-debugging-port=9222")  # Añadir esta línea
+        chrome_options.add_argument("--disable-gpu")  # Deshabilitar GPU
         self.driver = webdriver.Chrome(options=chrome_options)
         self.wait = WebDriverWait(self.driver, 20)  # Aumentar el tiempo de espera a 20 segundos
         self.photo_counter = 0  # Contador de fotos cargadas
