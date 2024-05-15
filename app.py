@@ -10,7 +10,7 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('/publish', methods=['POST'])
+@app.route('/publish', methods=['GET'])
 def publish():
     try:
         username = request.form.get('username')
