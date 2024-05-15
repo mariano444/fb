@@ -10,21 +10,26 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
+from flask import request
+
 @app.route('/publish', methods=['GET'])
 def publish():
     try:
-        username = request.form.get('username')
-        password = request.form.get('password')
-        num_publications = int(request.form.get('num_publications'))
-        marca = request.form['marca']
-        modelo = request.form['modelo']
-        precio = request.form['precio']
-        millaje = request.form['millaje']
-        anio = request.form['anio']
-        tipo = request.form['tipo']
-        carroceria = request.form['carroceria']
-        estado = request.form['estado']
-        transmision = request.form['transmision']
+        # Obtener los datos del formulario de la solicitud GET
+        username = request.args.get('username')
+        password = request.args.get('password')
+        num_publications = int(request.args.get('num_publications'))
+        marca = request.args.get('marca')
+        modelo = request.args.get('modelo')
+        precio = request.args.get('precio')
+        millaje = request.args.get('millaje')
+        anio = request.args.get('anio')
+        tipo = request.args.get('tipo')
+        carroceria = request.args.get('carroceria')
+        estado = request.args.get('estado')
+        transmision = request.args.get('transmision')
+        
+        # Resto del código para manejar los datos...
         
         chrome_options = ChromeOptions()
         chrome_options.add_argument('--headless')  # Run Chrome in headless mode
