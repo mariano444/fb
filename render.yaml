@@ -1,8 +1,18 @@
 services:
   - name: app
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: python app.py
+    buildCommand: |
+      apt-get update && \
+      apt-get install -y wget unzip xvfb libxi6 libgconf-2-4 libnss3-dev libxss1 libappindicator1 libindicator7 fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libcups2 libgtk-3-0 libx11-xcb1 libxtst6 lsb-release xdg-utils
+      wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+      dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
+      CHROME_DRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
+      wget -q https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip && \
+      unzip chromedriver_linux64.zip && \
+      mv chromedriver /usr/local/bin/ && \
+      rm chromedriver_linux64.zip
+      pip install -r requirements.txt
+    startCommand: gunicorn -b 0.0.0.0:$PORT app:app
     envVars:
       - key: FLASK_ENV
         value: production
