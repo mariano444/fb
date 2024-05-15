@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from FacebookMarketplaceBot import FacebookMarketplaceBot
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 import time
 import os
 
@@ -25,7 +26,13 @@ def publish():
         estado = request.form['estado']
         transmision = request.form['transmision']
         
-        bot = FacebookMarketplaceBot(username, password)
+        chrome_options = ChromeOptions()
+        chrome_options.add_argument('--headless')  # Run Chrome in headless mode
+        chrome_options.add_argument('--no-sandbox')  # Bypass OS security model
+        chrome_options.add_argument('--disable-dev-shm-usage')  # Overcome limited resources in Docker
+        chrome_options.binary_location = '/usr/bin/google-chrome'  # Correct Chrome binary location in Docker
+
+        bot = FacebookMarketplaceBot(username, password, chrome_options)
         bot.login()
 
         options = {
@@ -43,17 +50,13 @@ def publish():
             "Millaje": millaje
         }
 
-        # Directorio donde guardar las imágenes
         upload_dir = os.path.join(app.root_path, 'uploads')
 
-        # Crear el directorio si no existe
         if not os.path.exists(upload_dir):
             os.makedirs(upload_dir)
 
-        # Upload photos
         photo_paths = []
         for i, photo in enumerate(request.files.getlist("image")):
-            # Generar un nombre de archivo único para cada foto
             photo_filename = f"uploaded_photo_{i}.jpg"
             photo_path = os.path.join(upload_dir, photo_filename)
             photo.save(photo_path)
@@ -61,10 +64,10 @@ def publish():
         
         for i in range(num_publications):
             bot.complete_form(form_data, options, photo_paths)
-            time.sleep(15)  # Esperar 15 segundos antes de proceder
+            time.sleep(15)
             bot.click_button("Publicar")
             print(f"Publicación {i+1}/{num_publications} completada.")
-            time.sleep(30)  # Esperar 30 segundos entre publicaciones
+            time.sleep(30)
 
         bot.close_browser()
 
@@ -73,7 +76,5 @@ def publish():
         print(f"Error en la publicación: {e}")
         return jsonify({'error': str(e)}), 500
 
-
 if __name__ == '__main__':
-    # Lanzar el servidor WSGI con Waitress
-    serve(app, host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000)
