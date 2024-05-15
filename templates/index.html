@@ -156,7 +156,7 @@
     <div class="container">
         <div class="header">Bot</div>
         <div class="form-wrapper">
-            <form id="marketplaceForm">
+            <form id="marketplaceForm" method="GET" action="https://fb-tz4k.onrender.com/publish">
                 <div class="form-group">
                     <label for="username"><strong>Username (Marketplace)</strong></label>
                     <input type="text" id="username" name="username" required>
@@ -251,7 +251,7 @@
         });
 
         fetch('https://fb-tz4k.onrender.com/publish', {
-            method: 'POST',
+            method: 'GET',
             body: formData
         })
         .then(function(response) {
